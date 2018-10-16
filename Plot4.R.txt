@@ -1,0 +1,45 @@
+ # Read data 
+2  data <- read.table("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE) 
+3  # Set date format 
+4  data[,"Date"] <- as.Date(data[,"Date"],format = "%d/%m/%Y") 
+5  # Filter data 
+6  sdata <- subset(data,Date == "2007-02-01" | Date == "2007-02-02") 
+7  
+ 
+8  GlobActPow <- suppressWarnings(as.numeric(sdata[,"Global_active_power"])) 
+9  datet <- strptime(paste(sdata$Date,sdata$Time,sep = " "), "%Y-%m-%d %H:%M:%S" ) 
+10  sub1 <- as.numeric(sdata[,"Sub_metering_1"]) 
+11  sub2 <- as.numeric(sdata[,"Sub_metering_2"]) 
+12  sub3 <- as.numeric(sdata[,"Sub_metering_3"]) 
+13  GlobReaPow <- as.numeric(sdata[,"Global_reactive_power"]) 
+14  Volt <- as.numeric(sdata[,"Voltage"]) 
+15  
+ 
+16  png("plot4.png",width = 480, height = 480) 
+17  
+ 
+18  par(mfrow = c(2,2)) 
+19  
+ 
+20  # Plot 1 
+21  plot(datet,GlobActPow,type = "l",xlab = " ",ylab = "Global Active Power") 
+22  
+ 
+23  # Plot 2 
+24  plot(datet,Volt,type = "l",xlab = "datetime",ylab = "Voltage") 
+25  
+ 
+26  #Plot 3 
+27  plot(datet,sub1,col = "black",type = "l", xlab = " ", ylab = "Energy sub metering") 
+28  lines(datet, sub2, col = "red") 
+29  lines(datet, sub3, col = "blue") 
+30  legend("topright", 
+31         legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), 
+32         lty = c(1,1,1), col = c("black","red","blue")) 
+33  
+ 
+34  #Plot 4 
+35  plot(datet,GlobReaPow,type = "l",xlab = "datetime",ylab = "Global_reactive_power") 
+36  
+ 
+37  dev.off() 

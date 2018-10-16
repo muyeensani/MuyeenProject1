@@ -1,0 +1,14 @@
+1  # Read data 
+2  data <- read.table("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE) 
+3  # Set date format 
+4  data[,"Date"] <- as.Date(data[,"Date"],format = "%d/%m/%Y") 
+5  # Filter data 
+6  sdata<-subset(data,Date == "2007-02-01" | Date == "2007-02-02") 
+7  # Date-time format 
+8  datet<-strptime(paste(sdata$Date,sdata$Time,sep = " "), "%Y-%m-%d %H:%M:%S" ) 
+9  # Convert string to numeric format 
+10  GlobActPow<-as.numeric(sdata[,"Global_active_power"]) 
+11  # Make and save plot 
+12  png("plot2.png",width = 480, height = 480) 
+13  plot(datet,GlobActPow,type = "l",xlab = " ",ylab = "Global Active Power (kilowatts)") 
+14  dev.off() 
